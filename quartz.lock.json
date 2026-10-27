@@ -1,0 +1,29 @@
+{
+  "version": "1.0.0",
+  "plugins": {
+    "darkmode": {
+      "source": "github:quartz-community/darkmode",
+      "resolved": "https://github.com/quartz-community/darkmode.git",
+      "commit": "cc19caffb47798aac2c53155810237132e131e65",
+      "installedAt": "2026-10-25T00:37:11.698Z"
+    },
+    "explorer": {
+      "source": "github:quartz-community/explorer",
+      "resolved": "https://github.com/quartz-community/explorer.git",
+      "commit": "bf8e93766283caab163fc11bc8b5904790a769bc",
+      "installedAt": "2026-10-25T00:31:55.203Z"
+    },
+    "graph": {
+      "source": "github:quartz-community/graph",
+      "resolved": "https://github.com/quartz-community/graph.git",
+      "commit": "e647019c05ab2a3279c9cddd7bc2f18acb9858b8",
+      "installedAt": "2026-10-25T00:35:44.198Z"
+    },
+    "search": {
+      "source": "github:quartz-community/search",
+      "resolved": "https://github.com/quartz-community/search.git",
+      "commit": "f425045ac21f74210f858b10c8ab3a40f70b76eb",
+      "installedAt": "2026-10-25T00:33:57.046Z"
+    }
+  }
+}
