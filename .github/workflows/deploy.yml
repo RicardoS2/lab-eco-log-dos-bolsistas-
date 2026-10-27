@@ -1,20 +1,67 @@
-name: Disparar Atualização do Quartz
+name: Compilar e Publicar Site Quartz
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+  repository_dispatch:
+    types: [sync-notes]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
-  disparar:
-    name: Notificar Repositório do Quartz
+  compilar:
+    name: Compilar Site
     runs-on: ubuntu-latest
     steps:
-      - name: Enviar evento repository_dispatch para o Quartz
+      - name: Baixar código do Quartz
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Baixar notas do repositório privado para a pasta content
+        uses: actions/checkout@v4
+        with:
+          repository: 'RicardoS2/notes'
+          token: ${{ secrets.QUARTZ_TRIGGER_TOKEN }}
+          path: 'content'
+          fetch-depth: 0
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Instalar Dependências
         run: |
-          echo "Iniciando a notificação para o repositório do Quartz..."
-          curl -X POST \
-            -H "Authorization: Bearer ${{ secrets.QUARTZ_TRIGGER_TOKEN }}" \
-            -H "Accept: application/vnd.github+json" \
-            https://api.github.com/repos/RicardoS2/lab-eco-log-dos-bolsistas-/dispatches \
-            -d '{"event_type":"sync-notes"}'
-          echo "Notificação enviada com sucesso!"
+          echo "Instalando dependências do projeto..."
+          npm ci
+
+      - name: Compilar Quartz
+        run: |
+          echo "Gerando os arquivos estáticos do Quartz a partir da pasta content..."
+          npx quartz build
+
+      - name: Enviar artefato do site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+  publicar:
+    name: Publicar no GitHub Pages
+    needs: compilar
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fazer Deploy no GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
