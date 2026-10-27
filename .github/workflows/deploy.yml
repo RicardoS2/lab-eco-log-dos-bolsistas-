@@ -22,12 +22,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Baixar código do Quartz
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Baixar notas do repositório privado para a pasta content
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: 'RicardoS2/notes'
           token: ${{ secrets.QUARTZ_TRIGGER_TOKEN }}
@@ -35,7 +35,7 @@ jobs:
           fetch-depth: 0
 
       - name: Configurar Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: 22
 
@@ -50,7 +50,7 @@ jobs:
           npx quartz build
 
       - name: Enviar artefato do site
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: public
 
@@ -64,4 +64,4 @@ jobs:
     steps:
       - name: Fazer Deploy no GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
